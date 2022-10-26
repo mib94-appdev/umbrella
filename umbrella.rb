@@ -1,20 +1,12 @@
 p "Where are you located?"
 
-# user_location = gets.chomp
-
-user_location = "Taj Mahal"
+user_location = gets.chomp
 
 p user_location
 
 require "open-uri"
 
 gmaps_api_endpoint = "https://maps.googleapis.com/maps/api/geocode/json?address=" + user_location + "&key=AIzaSyAgRzRHJZf-uoevSnYDTf08or8QFS_fb3U"
-
-# using_gsub = "https://maps.googleapis.com/maps/api/geocode/json?address=PLACEHOLDER&key=AIzaSyAgRzRHJZf-uoevSnYDTf08or8QFS_fb3U".gsub("PLACEHOLDER", user_location)
-
-# using_interpolation = "https://maps.googleapis.com/maps/api/geocode/json?address=#{ user_location}&key=AIzaSyAgRzRHJZf-uoevSnYDTf08or8QFS_fb3U"
-
-# p gmaps_api_endpoint
 
 raw_data = URI.open(gmaps_api_endpoint).read
 
@@ -39,3 +31,15 @@ p longitude
 # Use latitude and longitude to compose the correct
 #   endpoint in Dark Sky's API
 # Print the current temperature
+
+dark_sky_uri = "https://api.darksky.net/forecast/26f63e92c5006b5c493906e7953da893/#{latitude},#{longitude}"
+
+dark_sky_raw_data = URI.open(dark_sky_uri).read
+
+dark_sky_parsed_data = JSON.parse(dark_sky_raw_data)
+
+currently_hash = dark_sky_parsed_data.fetch("currently")
+
+temperature = currently_hash.fetch("temperature")
+
+p "It is currently #{temperature} degrees farenheit."
